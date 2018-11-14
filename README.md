@@ -1,6 +1,6 @@
 # ZXEstimate
 
-##Installation
+## Installation
 ```
 git clone git@github.com:VBF-HZZ/ZXEstimate.git
 ```
@@ -15,7 +15,15 @@ source setup.sh
 root -b -q estimateFR.C
 ```
 
-## Produce Z+X ntuples for Run 2018
+## Produce skimmed ntuples from the central HZZ ntuples (Run 2018)
+```
+cd include
+root -b -q build_TreeSkimmer.C
+cd ..
+python skimZXTree_Run2018.py
+```
+
+## Produce Z+X ntuples with additional fake rate reweighting factors from skimmed ntuples (Run 2018)
 ```
 cd include
 root -b -q build_Analyzer.C
