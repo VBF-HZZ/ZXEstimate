@@ -12,7 +12,7 @@ isoMuCut        = 0.35
 outputDir       = "/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/20181114/"
 
 # ____________________________________________________________________________ ||
-ROOT.gSystem.Load("ZXAnalyzer_h.so")
+ROOT.gSystem.Load("include/ZXAnalyzer_h.so")
 ana = ROOT.ZXAnalyzer(
                 elFilePath,
                 muFilePath,

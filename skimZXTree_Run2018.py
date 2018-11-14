@@ -13,7 +13,7 @@ outputDir       = "/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/20181113/"
 inUFTier2       = True
 
 # ____________________________________________________________________________ ||
-ROOT.gSystem.Load("ZXTreeSkimmer_h.so")
+ROOT.gSystem.Load("include/ZXTreeSkimmer_h.so")
 zxTreeSkimmer = ROOT.ZXTreeSkimmer()
 
 makedirs(outputDir)
