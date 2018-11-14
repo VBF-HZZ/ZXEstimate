@@ -1,5 +1,8 @@
 # Customized
 *.sw*
+*.d
+*.so
+*.pcm
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

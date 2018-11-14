@@ -1,96 +1,50 @@
-#include <cmath>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <cstdlib>
-#include <stdio.h>
-
-// ROOT includes
-#include <TROOT.h>
-#include <TStyle.h>
-#include <TFile.h>
-#include <TChain.h>
-#include <TLatex.h>
-#include <TMath.h>
-#include "TRandom.h"
-#include <TFeldmanCousins.h>
-#include <TCanvas.h>
-#include <TTree.h>
-#include <TString.h>
-#include <TH1.h>
-#include <TH2.h>
-#include <THStack.h>
-#include <TF1.h>
-#include <TGraph.h>
-#include <TGraphErrors.h>
-#include <TGraphAsymmErrors.h>
-#include <TEfficiency.h>
-#include <TLine.h>
-#include <TPolyLine.h>
-#include <TLegend.h>
-#include <TLorentzVector.h>
-#include "Math/VectorUtil.h"
-#include "TClonesArray.h"
-
-// other includes
-//#include "setTDRStyle.C"
-
-using namespace std;
-
-// Lumi
-const double LUMI_INT = 36816; // /pb
+#include "include/HZZTree.h"
 
 // globals
-const int DEBUG_LEVEL = 0; // 0 - ERRORs, 1 - ERRORs & WARNINGs, 2 - ERRORs & WARNINGs & INFO
-const double CUT_ELPT = 7.;
-const double CUT_MUPT = 5.;
-const double CUT_MZLOW = 71.; 
-const double CUT_MZHIGH = 111.;
-const double CUT_MZ1LOW = 40.; 
-const double CUT_MZ1HIGH = 120.;
-const double CUT_MZ2LOW = 4.;
-const double CUT_MZ2HIGH = 120.;
-const double CUT_METHIGH = 100.;
-const double CUT_M4LLOW = 70.;
-const double CUT_M4LHIGH = 999999.;
-const double CUT_M4LLOW_FULL = 0.; 
-const double CUT_M4LHIGH_FULL = 1000.;
-const TString sPlotsStore = "plotsZX/";
-const int SORT_EVENTS = false;
-const double m4lDivide = 150.;
-// print out and debugging settings
-const int SILENT = true;
-int printOutWidth = 12;
-int printOutPrecision = 3;
-long int lNEvents = 1;
-//TString slimmedZXFileName="/raid/raid7/lucien/Higgs/DarkZ-NTuple/20180820/SkimTree_DarkPhoton_ZX_Run2016Data_v1/Data_Run2016_noDuplicates.root";
-//TString slimmedZXFileName="/raid/raid7/lucien/Higgs/DarkZ-NTuple/20180823/SkimTree_Data80X_HIG-16-041-ZXCRSelectionWithFlag_v3_liteHZZAna/Data_Run2016_noDuplicates_1.root";
-//TString slimmedZXFileName="/raid/raid5/predragm/Run2/HZZ4l/SubmitArea_13TeV/rootfiles_MC80X_2lskim_M17_Feb21/Data_ZX_Run2017-03Feb2017_slimmedZX.root";
-TString slimmedZXFileName="/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181107/SkimTree_DarkPhoton_ZX_Run2017Data_m4l70/Data_Run2017_noDuplicates.root";
+const double CUT_M4LLOW         = 70.;
+const double CUT_M4LHIGH        = 999999.;
+const double m4lDivide          = 150.;
+double isoCutEl                 = 999999.;
+//double isoCutEl               = 0.35;
+double isoCutMu                 = 0.35;
+
+const TString sPlotsStore       = "plotsZX/";
+const int SORT_EVENTS           = false;
+int printOutWidth               = 12;
+
+double var_plotHigh             = 600.0;
+double var_plotLow              = 50.0;
+double var_nBins                = 110;
+double binWidth = ((int) (100*(var_plotHigh - var_plotLow)/var_nBins))/100.;
+
+TString fr_hist_mu_EB           = "h1D_FRmu_EB";
+TString fr_hist_mu_EE           = "h1D_FRmu_EE";
+TString fr_hist_el_EB           = "h1D_FRel_EB";
+TString fr_hist_el_EE           = "h1D_FRel_EE";
+TString treeName                = "passedEvents";
+
+TString fileNameTag = "estimatesZX";
+TString fOption = "RECREATE";
+
+TString slimmedZXFileName       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181107/SkimTree_DarkPhoton_ZX_Run2017Data_m4l70/Data_Run2017_noDuplicates.root";
 
 // get the FR histograms and slimmed ZX tree
-//TString elFilePath = "/home/lucien/UF-PyNTupleRunner/DarkZ/Data/FakeRate/fakeRates_el_v2.root";
-//TString muFilePath = "/home/lucien/UF-PyNTupleRunner/DarkZ/Data/FakeRate/fakeRates_mu_v2.root";
-//TString elFilePath = "/home/lucien/UF-PyNTupleRunner/DarkZ/Data/FakeRate/fakeRates_el.root";
-//TString muFilePath = "/home/lucien/UF-PyNTupleRunner/DarkZ/Data/FakeRate/fakeRates_mu.root";
-//TString elFilePath = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/fakeRate.root";   
-//TString muFilePath = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/fakeRate.root";   
 TString elFilePath = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root";
 TString muFilePath = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root";
 
 double getFR(int lep_id, double lep_pt, double lep_eta, TH1D* h1D_FRel_EB,   TH1D* h1D_FRel_EE,   TH1D* h1D_FRmu_EB,   TH1D* h1D_FRmu_EE);
-void getEstimateZX(TString slimmedZXFileName, double ptElCut = CUT_ELPT, double ptMuCut = CUT_MUPT, double mZ2Cut = CUT_MZ2LOW);
+
+void getEstimateZX(TString slimmedZXFileName);
 int getEstimatesFromCR(TTree* tree,
                   TH1D* h1D_FRel_EB,   TH1D* h1D_FRel_EE,   TH1D* h1D_FRmu_EB,   TH1D* h1D_FRmu_EE,
                   TH1D* &h1D_m4l_SR_2P2F, TH1D* &h1D_m4l_SR_3P1F,
                   TH1D* &h1D_m4l_SR_2P2F_4mu, TH1D* &h1D_m4l_SR_3P1F_4mu,
                   TH1D* &h1D_m4l_SR_2P2F_4e, TH1D* &h1D_m4l_SR_3P1F_4e,
-                  TH1D* &h1D_m4l_SR_2P2F_2e2mu, TH1D* &h1D_m4l_SR_3P1F_2e2mu,
-                  double ptElCut = CUT_ELPT, double ptMuCut = CUT_MUPT, double mZ2Cut = CUT_MZ2LOW);
+                  TH1D* &h1D_m4l_SR_2P2F_2e2mu, TH1D* &h1D_m4l_SR_3P1F_2e2mu
+                  );
 
-int estimateZX(){
+void estimateZX(){
     getEstimateZX(slimmedZXFileName);
-    return -1;
 }
 
 //_______________________________________________________________________________________________________________________________________________
@@ -103,29 +57,21 @@ double getFR(int lep_id, float lep_pt, float lep_eta, TH1D* h1D_FRel_EB,   TH1D*
 }
 
 //_______________________________________________________________________________________________________________________________________________
-void getEstimateZX(TString slimmedZXFileName, double ptElCut, double ptMuCut, double mZ2Cut){
-
-    // common properties
-    Width_t lineWidth = 2;
-    double leg_xl = 0.50, leg_xr = 0.90, leg_yb = 0.72, leg_yt = 0.90; 
+void getEstimateZX(TString slimmedZXFileName){
 
     TFile* elFile = new TFile(elFilePath,"READ");
-    TH1D* h1D_FRel_EB = (TH1D*) elFile->Get("h1D_FRel_EB");
-    TH1D* h1D_FRel_EE = (TH1D*) elFile->Get("h1D_FRel_EE");
+    TH1D* h1D_FRel_EB = (TH1D*) elFile->Get(fr_hist_el_EB);
+    TH1D* h1D_FRel_EE = (TH1D*) elFile->Get(fr_hist_el_EE);
     
     TFile* muFile = new TFile(muFilePath,"READ");
-    TH1D* h1D_FRmu_EB = (TH1D*) muFile->Get("h1D_FRmu_EB");
-    TH1D* h1D_FRmu_EE = (TH1D*) muFile->Get("h1D_FRmu_EE");
+    TH1D* h1D_FRmu_EB = (TH1D*) muFile->Get(fr_hist_mu_EB);
+    TH1D* h1D_FRmu_EE = (TH1D*) muFile->Get(fr_hist_mu_EE);
 
     TFile *f = TFile::Open(slimmedZXFileName);
-    TTree* zxTree = (TTree*) f->Get("passedEvents");
-    //TTree* zxTree = (TTree*) f->Get("selectedEvents");
+    TTree* zxTree = (TTree*) f->Get(treeName);
 
     // define dummy histogram for CRs
-    double var_plotHigh = 600.0; double var_plotLow = 50.0; double var_nBins = 110;
     TH1D* h1D_dummyCR = new TH1D("dummyCR", "dummyCR", var_nBins, var_plotLow, var_plotHigh);
-    TString varAxLabel = "m_{4l} [GeV]";
-    double binWidth = ((int) (100*(var_plotHigh - var_plotLow)/var_nBins))/100.;
 
     // define CR histograms
     TH1D* h1D_m4l_SR_2P2F       = new TH1D("h1D_m4l_SR_2P2F","h1D_m4l_SR_2P2F",var_nBins, var_plotLow, var_plotHigh); 
@@ -150,16 +96,14 @@ void getEstimateZX(TString slimmedZXFileName, double ptElCut, double ptMuCut, do
             h1D_m4l_SR_2P2F, h1D_m4l_SR_3P1F, 
             h1D_m4l_SR_2P2F_4mu, h1D_m4l_SR_3P1F_4mu, 
             h1D_m4l_SR_2P2F_4e, h1D_m4l_SR_3P1F_4e, 
-            h1D_m4l_SR_2P2F_2e2mu, h1D_m4l_SR_3P1F_2e2mu, 
-            ptElCut, ptMuCut, mZ2Cut);
+            h1D_m4l_SR_2P2F_2e2mu, h1D_m4l_SR_3P1F_2e2mu
+            );
 
     // total contribution (3P1F - 2P2F)
     TH1D* h1D_m4l_SR_tot = (TH1D*) h1D_m4l_SR_3P1F->Clone("h1D_m4l_SR_tot");
     h1D_m4l_SR_tot->Add(h1D_m4l_SR_2P2F, -1);
 
     // store slimmed tree and histograms in .root file
-    TString fileNameTag = "estimatesZX";
-    TString fOption = "RECREATE";
     TFile* fTemplateTree = new TFile(sPlotsStore+"/"+fileNameTag+".root", fOption);
     fTemplateTree->cd();
     h1D_FRel_EB->SetName("h1D_FRel_EB"); h1D_FRel_EB->Write();
@@ -181,23 +125,7 @@ int getEstimatesFromCR(TTree* tree,
               TH1D* &h1D_m4l_SR_2P2F_4e, TH1D* &h1D_m4l_SR_3P1F_4e,
               TH1D* &h1D_m4l_SR_2P2F_2e2mu, TH1D* &h1D_m4l_SR_3P1F_2e2mu,
               double ptElCut, double ptMuCut, double mZ2Cut){
-
-    // define vars and branches
-    float mass4l,massZ1,massZ2;
-    float eventWeight, dataMCWeight, crossSection;
-    ULong64_t Run, LumiSect, Event;
-    int finalState, nVtx;
-    bool passedFullSelection, passedZ1LSelection, passedZXCRSelection, passedZ4lSelection;
-    vector<float> *lep_pt = 0; TBranch *b_lep_pt = 0;
-    vector<float> *lep_eta = 0; TBranch *b_lep_eta = 0;
-    vector<float> *lep_phi = 0; TBranch *b_lep_phi = 0;
-    vector<float> *lep_mass = 0; TBranch *b_lep_mass = 0;
-    //int lep_Hindex[4];
-    vector<int>* lep_Hindex = 0;
-    vector<int> *lep_id = 0; TBranch *b_lep_id = 0;
-    vector<int> *lep_tightId = 0; TBranch *b_lep_tightId = 0;
-    vector<float> *lep_RelIsoNoFSR = 0; TBranch *b_lep_RelIsoNoFSR = 0;
-
+    
     // counters
     int nEvtPassedZXCRSelection = 0;
     int nEvt2P2FLeptons = 0;
@@ -205,29 +133,7 @@ int getEstimatesFromCR(TTree* tree,
     int nFailedLeptonsZ2 = 0;
 
     // get branches
-    tree->SetBranchAddress("Run",&Run);
-    tree->SetBranchAddress("LumiSect",&LumiSect);
-    tree->SetBranchAddress("Event",&Event);
-    tree->SetBranchAddress("crossSection",&crossSection);
-    tree->SetBranchAddress("eventWeight",&eventWeight);
-    tree->SetBranchAddress("dataMCWeight",&dataMCWeight);
-    tree->SetBranchAddress("passedFullSelection",&passedFullSelection);
-    tree->SetBranchAddress("passedZ1LSelection",&passedZ1LSelection);
-    tree->SetBranchAddress("passedZXCRSelection",&passedZXCRSelection);
-    tree->SetBranchAddress("passedZ4lSelection",&passedZ4lSelection);
-    tree->SetBranchAddress("nVtx",&nVtx);
-    tree->SetBranchAddress("finalState",&finalState);
-    tree->SetBranchAddress("mass4l",&mass4l);
-    tree->SetBranchAddress("massZ1",&massZ1);
-    tree->SetBranchAddress("massZ2",&massZ2);
-    tree->SetBranchAddress("lep_Hindex",&lep_Hindex);
-    tree->SetBranchAddress("lep_pt",&lep_pt,&b_lep_pt);
-    tree->SetBranchAddress("lep_eta",&lep_eta,&b_lep_eta);
-    tree->SetBranchAddress("lep_phi",&lep_phi,&b_lep_phi);
-    tree->SetBranchAddress("lep_mass",&lep_mass,&b_lep_mass);
-    tree->SetBranchAddress("lep_id",&lep_id,&b_lep_id);
-    tree->SetBranchAddress("lep_tightId",&lep_tightId,&b_lep_tightId);
-    tree->SetBranchAddress("lep_RelIsoNoFSR",&lep_RelIsoNoFSR,&b_lep_RelIsoNoFSR);
+    setZXTree(tree);
 
     Long64_t nentries = tree->GetEntries();
     cout << "nentries: " << nentries << endl;
@@ -246,7 +152,6 @@ int getEstimatesFromCR(TTree* tree,
         }
 
         // weight
-        //float weight = eventWeight*dataMCWeight*crossSection*LUMI_INT/lNEvents;
         float weight = 1.;
 
         if (passedZXCRSelection &&
