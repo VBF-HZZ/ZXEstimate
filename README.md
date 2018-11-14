@@ -1,5 +1,3 @@
-# ZXEstimate
-
 ## Installation
 ```
 git clone git@github.com:VBF-HZZ/ZXEstimate.git
