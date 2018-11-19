@@ -30,7 +30,9 @@ class ZXAnalyzer : public Analyzer
                 TString muFilePath_in,
                 double isoCutEl_in,
                 double isoCutMu_in,
-                TString outputDir_in
+                TString outputDir_in,
+                bool isHZZInput_in=true,
+                TString TFileName_in="ZXTree_FRWeight.root"
                 );
         double isoCutEl,isoCutMu;
         TString elFilePath,muFilePath;
@@ -49,6 +51,7 @@ class ZXAnalyzer : public Analyzer
         float FRWeightProd_UniIso;
         float FRWeightProd_AsymIso;
         int nFailedLeptonsZ2;
+        bool isHZZInput;
 }; 
 
 ZXAnalyzer::ZXAnalyzer(
@@ -56,13 +59,17 @@ ZXAnalyzer::ZXAnalyzer(
                 TString muFilePath_in,
                 double isoCutEl_in,
                 double isoCutMu_in,
-                TString outputDir_in
+                TString outputDir_in,
+                bool isHZZInput_in,
+                TString TFileName_in
                 ){
     elFilePath  = elFilePath_in;
     muFilePath  = muFilePath_in;
     isoCutEl    = isoCutEl_in; 
     isoCutMu    = isoCutMu_in;
     outputDir   = outputDir_in;
+    isHZZInput  = isHZZInput_in;
+    TFileName   = TFileName_in;
 }
 
 void ZXAnalyzer::setup(){
@@ -100,15 +107,18 @@ void ZXAnalyzer::process(){
     float etaL[4];
     float phiL[4];
     for(unsigned int k = 0; k <= 3; k++) {
-        lep_tight[k] = lep_tightId->at(lep_Hindex[k]);
-        lep_iso[k]= lep_RelIsoNoFSR->at(lep_Hindex[k]);
-        idL[k] = lep_id->at(lep_Hindex[k]);
-    
-        //lep_tight[k] = lep_tightId->at(lep_Hindex->at(k));
-        //lep_iso[k]= lep_RelIsoNoFSR->at(lep_Hindex->at(k));
-        //idL[k] = lep_id->at(lep_Hindex->at(k));
+
         TLorentzVector lep;
-        //lep.SetPtEtaPhiM(lep_pt->at(lep_Hindex->at(k)),lep_eta->at(lep_Hindex->at(k)),lep_phi->at(lep_Hindex->at(k)),lep_mass->at(lep_Hindex->at(k)));
+        if (isHZZInput){
+            lep_tight[k] = lep_tightId->at(lep_Hindex[k]);
+            lep_iso[k]= lep_RelIsoNoFSR->at(lep_Hindex[k]);
+            idL[k] = lep_id->at(lep_Hindex[k]);
+        } else {
+            lep_tight[k] = lep_tightId->at(lep_Hindex_stdvec->at(k));
+            lep_iso[k]= lep_RelIsoNoFSR->at(lep_Hindex_stdvec->at(k));
+            idL[k] = lep_id->at(lep_Hindex_stdvec->at(k));
+            lep.SetPtEtaPhiM(lep_pt->at(lep_Hindex_stdvec->at(k)),lep_eta->at(lep_Hindex_stdvec->at(k)),lep_phi->at(lep_Hindex_stdvec->at(k)),lep_mass->at(lep_Hindex_stdvec->at(k)));
+        };
         lep.SetPtEtaPhiM(lep_pt->at(lep_Hindex[k]),lep_eta->at(lep_Hindex[k]),lep_phi->at(lep_Hindex[k]),lep_mass->at(lep_Hindex[k]));
         pTL[k]  = lep.Pt();
         etaL[k] = lep.Eta();

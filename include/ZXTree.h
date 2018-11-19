@@ -54,7 +54,7 @@ vector<float> *lepFSR_eta = 0; TBranch *b_lepFSR_eta = 0;
 vector<float> *lepFSR_phi = 0; TBranch *b_lepFSR_phi = 0;
 vector<float> *lepFSR_mass = 0; TBranch *b_lepFSR_mass = 0;
 int lep_Hindex[4];
-//vector<int>* lep_Hindex = 0;
+vector<int>* lep_Hindex_stdvec = 0;
 vector<int> *lep_id = 0; TBranch *b_lep_id = 0;
 vector<int> *lep_tightId = 0; TBranch *b_lep_tightId = 0;
 vector<float> *lep_RelIsoNoFSR = 0; TBranch *b_lep_RelIsoNoFSR = 0;
@@ -120,7 +120,7 @@ void setZXTree( TTree* tree
     tree->SetBranchAddress("lep_RelIsoNoFSR",&lep_RelIsoNoFSR,&b_lep_RelIsoNoFSR);
 }
 
-void setTree( TTree* tree
+void setTree( TTree* tree, bool isHZZTree=false
                 ){
     tree->SetBranchAddress("Run",&Run);
     tree->SetBranchAddress("LumiSect",&LumiSect);
@@ -138,7 +138,11 @@ void setTree( TTree* tree
     tree->SetBranchAddress("massZ1",&massZ1);
     tree->SetBranchAddress("massZ2",&massZ2);
     tree->SetBranchAddress("met",&met);
-    tree->SetBranchAddress("lep_Hindex",&lep_Hindex);
+    if (isHZZTree) {
+        tree->SetBranchAddress("lep_Hindex",&lep_Hindex);
+    } else {
+        tree->SetBranchAddress("lep_Hindex",&lep_Hindex_stdvec);
+    };
     tree->SetBranchAddress("lep_pt",&lep_pt,&b_lep_pt);
     tree->SetBranchAddress("lep_eta",&lep_eta,&b_lep_eta);
     tree->SetBranchAddress("lep_phi",&lep_phi,&b_lep_phi);
