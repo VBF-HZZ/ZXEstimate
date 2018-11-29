@@ -9,7 +9,7 @@ outputDir = "/cms/data/store/user/t2/users/klo/Higgs/DarkZ/NTuples/Data_Run2018/
 inputDir        = "/cms/data/store/user/t2/users/klo/Higgs/DarkZ/NTuples/Data_Run2018/ZXData_Oct18_v1/"
 pdNames         = ["SingleMuon","DoubleMuon","MuonEG","EGamma",]
 treeName        = "Ana/passedEvents"
-outputDir       = "/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/20181113/"
+outputDir       = "/raid/raid7/lucien/Higgs/HZZ4l/NTuple/ZPlusX/ZXCR/20181129_Run2018/"
 inUFTier2       = True
 
 # ____________________________________________________________________________ ||

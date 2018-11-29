@@ -2,8 +2,8 @@
 #define ZXTreeSkimmer_h
 
 #include "TreeSkimmer.h"
-#include "HZZTree.h"
-//#include "Linkdef.h"
+#include "ZXTree.h"
+#include "TreeSkimmer_Linkdef.h"
 
 class ZXTreeSkimmer : public TreeSkimmer
 {

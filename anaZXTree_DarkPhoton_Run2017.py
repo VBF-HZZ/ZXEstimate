@@ -20,8 +20,8 @@ ana = ROOT.ZXAnalyzer(
                 isoElCut,
                 isoMuCut,
                 outputDir,
-                False,
                 TFileName,
+                "LiteHZZTree",
                 )
 #ana.getFile(inputPath)
 #ana.getTree(treeName)

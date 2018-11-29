@@ -5,8 +5,8 @@ from PyUtils.Shell import makedirs
 # ____________________________________________________________________________ ||
 inputPath       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181116/SkimTree_DarkPhoton_ZX_Run2016Data_m4l70/Data_Run2016-03Feb2017_noDuplicates.root"
 treeName        = "passedEvents"
-elFilePath      = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root"
-muFilePath      = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root"
+elFilePath      = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate.root"
+muFilePath      = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate.root"
 isoElCut        = 0.35
 isoMuCut        = 0.35
 outputDir       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181116/SkimTree_DarkPhoton_ZX_Run2016Data_m4l70/"
@@ -20,8 +20,8 @@ ana = ROOT.ZXAnalyzer(
                 isoElCut,
                 isoMuCut,
                 outputDir,
-                False,
                 TFileName,
+                "LiteHZZTree",
                 )
 #ana.getFile(inputPath)
 #ana.getTree(treeName)
