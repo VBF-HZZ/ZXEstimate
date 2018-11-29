@@ -36,6 +36,8 @@ using namespace std;
 
 void setFRTree( TTree* tree );
 void setZXTree( TTree* tree );
+void setHZZTreeStatus( TTree* tree );
+void setHZZTree( TTree* tree );
 
 const double pdg_massZ1 = 91.1876;
 
@@ -107,71 +109,63 @@ float k_qqZZ_qcd_M,k_qqZZ_ewk,k_ggZZ;
 float sumW;
 int nVtx, nInt; //nPV
 float me_qqZZ_MCFM;
-std::vector<float>* lep_mass;
-std::vector<float> *lep_pt; std::vector<float> *lep_eta; std::vector<float> *lep_phi;
-std::vector<float>* lepFSR_mass;
-std::vector<float> *lepFSR_pt; std::vector<float> *lepFSR_eta; std::vector<float> *lepFSR_phi;
-std::vector<int> *lep_Hindex_stdvec;
-
-std::vector<int> *lep_tightId;
-std::vector<int> *lep_ecalDriven;
-std::vector<int> *lep_id;
-std::vector<int> *lep_Sip;
-std::vector<float> *lep_dxy;
-std::vector<float> *lep_dz;
-int lep_Hindex[4];
-std::vector<float> *lep_RelIso;
-std::vector<float> *lep_RelIsoNoFSR;
-std::vector<float> *lep_pterr;
-std::vector<float> *lep_dataMC;
-std::vector<int> *lep_matchedR03_PdgId;
-std::vector<int> *lep_matchedR03_MomId;
-std::vector<int> *lep_matchedR03_MomMomId;
-
-std::vector<float> *jet_mass;
-std::vector<float> *jet_pt; std::vector<float> *jet_eta; std::vector<float> *jet_phi;
-std::vector<int> *jet_iscleanH4l; std::vector<float> *jet_QGTagger; std::vector<float> *jet_csvv2;
-
-std::vector<int> *fsrPhotons_lepindex;
-std::vector<float> *fsrPhotons_pt; std::vector<float> *fsrPhotons_eta; std::vector<float> *fsrPhotons_phi;
-std::vector<float> *fsrPhotons_pterr;
-
 float eventWeight;
-//// define vars and branches
-//float mass4l,massZ1,massZ2;
-//float eventWeight, dataMCWeight, crossSection;
-//ULong64_t Run, LumiSect, Event;
-//int finalState, nVtx;
-//bool passedFullSelection, passedZ1LSelection, passedZXCRSelection, passedZ4lSelection;
-//vector<float> *lep_pt; 
-TBranch *b_lep_pt;
-//vector<float> *lep_eta; 
-TBranch *b_lep_eta;
-//vector<float> *lep_phi; 
-TBranch *b_lep_phi;
-//vector<float> *lep_mass; 
-TBranch *b_lep_mass;
-//vector<float> *lepFSR_pt; 
-TBranch *b_lepFSR_pt;
-//vector<float> *lepFSR_eta; 
-TBranch *b_lepFSR_eta;
-//vector<float> *lepFSR_phi; 
-TBranch *b_lepFSR_phi;
-//vector<float> *lepFSR_mass; 
-TBranch *b_lepFSR_mass;
-//int lep_Hindex[4];
-////vector<int>* lep_Hindex_stdvec;
-//vector<int> *lep_id; 
-TBranch *b_lep_id;
-//vector<int> *lep_tightId; 
-TBranch *b_lep_tightId;
-//vector<float> *lep_RelIsoNoFSR; 
-TBranch *b_lep_RelIso;
-TBranch *b_lep_RelIsoNoFSR;
-TBranch *b_lep_matchedR03_PdgId;
-TBranch *b_lep_matchedR03_MomId;
-TBranch *b_lep_matchedR03_MomMomId;
-//float met;
+
+int lep_Hindex[4];
+
+std::vector<float>* lep_mass = 0;
+std::vector<float> *lep_pt = 0; 
+std::vector<float> *lep_eta = 0; 
+std::vector<float> *lep_phi = 0;
+std::vector<float>* lepFSR_mass = 0;
+std::vector<float> *lepFSR_pt = 0; 
+std::vector<float> *lepFSR_eta = 0; 
+std::vector<float> *lepFSR_phi = 0;
+std::vector<int> *lep_Hindex_stdvec = 0;
+
+std::vector<int> *lep_tightId = 0;
+std::vector<int> *lep_ecalDriven = 0;
+std::vector<int> *lep_id = 0;
+std::vector<int> *lep_Sip = 0;
+std::vector<float> *lep_dxy = 0;
+std::vector<float> *lep_dz = 0;
+std::vector<float> *lep_RelIso = 0;
+std::vector<float> *lep_RelIsoNoFSR = 0;
+std::vector<float> *lep_pterr = 0;
+std::vector<float> *lep_dataMC = 0;
+std::vector<int> *lep_matchedR03_PdgId = 0;
+std::vector<int> *lep_matchedR03_MomId = 0;
+std::vector<int> *lep_matchedR03_MomMomId = 0;
+
+std::vector<float> *jet_mass = 0;
+std::vector<float> *jet_pt = 0; 
+std::vector<float> *jet_eta = 0; 
+std::vector<float> *jet_phi = 0;
+std::vector<int> *jet_iscleanH4l = 0; 
+std::vector<float> *jet_QGTagger = 0; 
+std::vector<float> *jet_csvv2 = 0;
+
+std::vector<int> *fsrPhotons_lepindex = 0;
+std::vector<float> *fsrPhotons_pt = 0; 
+std::vector<float> *fsrPhotons_eta = 0; 
+std::vector<float> *fsrPhotons_phi = 0;
+std::vector<float> *fsrPhotons_pterr = 0;
+
+TBranch *b_lep_pt = 0;
+TBranch *b_lep_eta = 0;
+TBranch *b_lep_phi = 0;
+TBranch *b_lep_mass = 0;
+TBranch *b_lepFSR_pt = 0;
+TBranch *b_lepFSR_eta = 0;
+TBranch *b_lepFSR_phi = 0;
+TBranch *b_lepFSR_mass = 0;
+TBranch *b_lep_id = 0;
+TBranch *b_lep_tightId = 0;
+TBranch *b_lep_RelIso = 0;
+TBranch *b_lep_RelIsoNoFSR = 0;
+TBranch *b_lep_matchedR03_PdgId = 0;
+TBranch *b_lep_matchedR03_MomId = 0;
+TBranch *b_lep_matchedR03_MomMomId = 0;
 
 void setFRTree( TTree* tree
                 ){
@@ -233,7 +227,7 @@ void setZXTree( TTree* tree
     tree->SetBranchAddress("lep_RelIsoNoFSR",&lep_RelIsoNoFSR,&b_lep_RelIsoNoFSR);
 }
 
-void setTree( TTree* tree 
+void setHZZTree( TTree* tree 
                 ){ 
     tree->SetBranchAddress("Run",&Run); 
     tree->SetBranchAddress("LumiSect",&LumiSect); 
@@ -276,7 +270,7 @@ void setTree( TTree* tree
     tree->SetBranchAddress("lep_matchedR03_MomMomId",&lep_matchedR03_MomMomId,&b_lep_matchedR03_MomMomId);
 }
 
-void setTreeStatus(TTree* tree){
+void setHZZTreeStatus(TTree* tree){
     tree->SetBranchStatus("*",0);
 
     tree->SetBranchStatus("Run",1);

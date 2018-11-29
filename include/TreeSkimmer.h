@@ -45,7 +45,6 @@ void TreeSkimmer::setTree(TTree* tree){
 void TreeSkimmer::makeSkim(TString inputPath, TString inputTreeName, TString outputPath){
     TFile* outFile = new TFile(outputPath, fOptionWrite);
 
-    //TFile *inFile = new TFile(inputPath, fOptionRead);
     TFile *inFile = TFile::Open(inputPath, fOptionRead);
     inTree = (TTree*) inFile->Get(inputTreeName); 
     setTreeStatus(inTree);
@@ -55,7 +54,7 @@ void TreeSkimmer::makeSkim(TString inputPath, TString inputTreeName, TString out
 
     // get branches
     setTree(inTree);
-    
+
     Long64_t nentries = inTree->GetEntries();
 
     for(int iEvt=0; iEvt < nentries; iEvt++){

@@ -18,10 +18,10 @@ bool ZXTreeSkimmer::passSelection(){
 }
 
 void ZXTreeSkimmer::setTreeStatus(TTree* tree){
-    setTreeStatus(tree);
+    setHZZTreeStatus(tree);
 }
 
 void ZXTreeSkimmer::setTree(TTree* tree){
-    setTree(tree);
+    setHZZTree(tree);
 }
 #endif
