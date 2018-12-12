@@ -14,7 +14,7 @@ class ZXTreeSkimmer : public TreeSkimmer
 };
 
 bool ZXTreeSkimmer::passSelection(){
-    return passedZXCRSelection;
+    return passedZXCRSelection or passedZ1LSelection;
 }
 
 void ZXTreeSkimmer::setTreeStatus(TTree* tree){

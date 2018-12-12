@@ -177,8 +177,8 @@ bool ZXAnalyzer::passSelection(){
 
 void ZXAnalyzer::initTree(){
     if (inputTreeType == tree_type_ZXTree) {
-        setTreeStatus(tree);
-        setTree(tree);
+        setHZZTreeStatus(tree);
+        setHZZTree(tree);
     } else if (inputTreeType == tree_type_LiteHZZTree) {
         setHZZLiteTree(tree);
     }
