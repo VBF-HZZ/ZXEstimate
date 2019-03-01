@@ -1,19 +1,21 @@
-#include "include/HZZTree.h"
+#include "include/ZXTree.h"
 #include "include/UFUtils.h"
 
+TString slimmedZXFileName=t2_prefix+"/store/user/t2/users/klo/Higgs/DarkZ/NTuples/Z1LSkim/Run2016/Data_Run2016_noDuplicates.root";
 //TString file_path="/store/user/t2/users/klo/Higgs/DarkZ/NTuples/Z1LSkim/Run2016/Data_Run2016_noDuplicates.root";
 //TString slimmedZXFileName="/raid/raid7/lucien/Higgs/DarkZ-NTuple/20180820/SkimTree_DarkPhoton_ZX_Run2016Data_v1/Data_Run2016_noDuplicates.root";
-//TString slimmedZXFileName="/raid/raid7/lucien/Higgs/DarkZ-NTuple/20180823/SkimTree_Data80X_HIG-16-041-ZXCRSelect//ionWithFlag_v3_liteHZZAna/Data_Run2016_noDuplicates_1.root";
+//TString slimmedZXFileName="/raid/raid7/lucien/Higgs/DarkZ-NTuple/20180823/SkimTree_Data80X_HIG-16-041-ZXCRSelectionWithFlag_v3_liteHZZAna/Data_Run2016_noDuplicates_1.root";
 //TString slimmedZXFileName="/raid/raid5/predragm/Run2/HZZ4l/SubmitArea_13TeV/rootfiles_MC80X_2lskim_M17_Feb21/Data_ZX_Run2017-03Feb2017_slimmedZX.root";
 //TString slimmedZXFileName="root://cmsio5.rc.ufl.edu//store/user/t2/users/dsperka/Run2/HZZ4l/SubmitArea_13TeV/rootfiles_Data80X_2lskim_M17_Feb21/SingleDoubleMuon_Run2016-03Feb2017.root";
 //TString slimmedZXFileName="root://cmsio5.rc.ufl.edu//store/user/t2/users/dsperka/Run2/HZZ4l/SubmitArea_13TeV/rootfiles_Data80X_2lskim_M17_Feb21/SingleDoubleMuon_Run2016-03Feb2017.root";
-TString file_path="/store/user/t2/users/klo/Higgs/DarkZ/NTuples/ZPlusX_Early2017_v1/skimZ1L_Data_Run2017-17Nov2017_noDuplicates.root";
-TString slimmedZXFileName=t2_prefix+file_path;
+//TString file_path="/store/user/t2/users/klo/Higgs/DarkZ/NTuples/ZPlusX_Early2017_v1/skimZ1L_Data_Run2017-17Nov2017_noDuplicates.root";
+//TString slimmedZXFileName=t2_prefix+file_path;
 
-TString outputPath = "Data/fakeRate2017.root";
+//TString outputPath = "Data/fakeRate2017_20190115.root";
+TString outputPath = "Data/fakeRate2016_20190115.root";
 
-double isoCutEl     = 999999.;
-//double isoCutEl   = 0.35;
+//double isoCutEl     = 999999.;
+double isoCutEl     = 0.35;
 double isoCutMu     = 0.35;
 double metCut       = 25.; 
 double massZ1Cut    = 4.;

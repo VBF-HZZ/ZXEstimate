@@ -3,21 +3,13 @@ from PyUtils.UFTier2 import listdir_uberftp,t2_prefix,FileInfo
 from PyUtils.Shell import makedirs 
 
 # ____________________________________________________________________________ ||
-#inputPath       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181116/SkimTree_DarkPhoton_ZX_Run2016Data_m4l70/Data_Run2016-03Feb2017_noDuplicates.root"
-#inputPath       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181214/SkimTree_HToZdZd_ZX_Run2016Data_m4l70/Data_Run2016-03Feb2017_noDuplicates.root"
 inputPath       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20190218/SkimTree_HToZdZd_ZX_Run2016Data_m4l70_noZCandRatioCut/Data_Run2016-2l_noDuplicates.root"
 treeName        = "passedEvents"
-#elFilePath      = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate.root"
-#muFilePath      = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate.root"
 elFilePath      = "/home/lucien/Higgs/DarkZ/ZXEstimate/Data/fakeRate2016_20190115.root"
 muFilePath      = "/home/lucien/Higgs/DarkZ/ZXEstimate/Data/fakeRate2016_20190115.root"
 isoElCut        = 0.35
 isoMuCut        = 0.35
-# HZZd
-#outputDir       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181116/SkimTree_DarkPhoton_ZX_Run2016Data_m4l70/"
-outputDir       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20190218/SkimTree_DarkPhoton_ZX_Run2016Data_m4l70/"
-# HZdZd
-#outputDir       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181214/SkimTree_HToZdZd_ZX_Run2016Data_m4l70/"
+outputDir       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20190218/SkimTree_HToZdZd_ZX_Run2016Data_m4l70_noZCandRatioCut/"
 TFileName       = "Data_Run2016-2l_noDuplicates_FRWeight.root"
 
 # ____________________________________________________________________________ ||
@@ -31,6 +23,4 @@ ana = ROOT.ZXAnalyzer(
                 TFileName,
                 "LiteHZZTree",
                 )
-#ana.getFile(inputPath)
-#ana.getTree(treeName)
 ana.loop(inputPath,treeName)

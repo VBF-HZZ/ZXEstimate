@@ -36,7 +36,11 @@ class ZXAnalyzer : public Analyzer
                 double isoCutMu_in,
                 TString outputDir_in,
                 TString TFileName_in="ZXTree_FRWeight.root",
-                TString inputTreeType_in="ZXTree"
+                TString inputTreeType_in="ZXTree",
+                TString fr_hist_mu_EB_in = "h1D_FRmu_EB",
+                TString fr_hist_mu_EE_in = "h1D_FRmu_EE",
+                TString fr_hist_el_EB_in = "h1D_FRel_EB",
+                TString fr_hist_el_EE_in = "h1D_FRel_EE"
                 );
         double isoCutEl,isoCutMu;
         TString elFilePath,muFilePath;
@@ -66,7 +70,11 @@ ZXAnalyzer::ZXAnalyzer(
                 double isoCutMu_in,
                 TString outputDir_in,
                 TString TFileName_in,
-                TString inputTreeType_in
+                TString inputTreeType_in,
+                TString fr_hist_mu_EB_in,
+                TString fr_hist_mu_EE_in,
+                TString fr_hist_el_EB_in,
+                TString fr_hist_el_EE_in
                 ){
     elFilePath      = elFilePath_in;
     muFilePath      = muFilePath_in;
@@ -75,6 +83,10 @@ ZXAnalyzer::ZXAnalyzer(
     outputDir       = outputDir_in;
     TFileName       = TFileName_in;
     inputTreeType   = inputTreeType_in;
+    fr_hist_mu_EB   = fr_hist_mu_EB_in;
+    fr_hist_mu_EE   = fr_hist_mu_EE_in;
+    fr_hist_el_EB   = fr_hist_el_EB_in;
+    fr_hist_el_EE   = fr_hist_el_EE_in;
 }
 
 void ZXAnalyzer::setup(){

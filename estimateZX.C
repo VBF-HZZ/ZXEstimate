@@ -1,8 +1,8 @@
-#include "include/HZZTree.h"
+#include "include/ZXTree.h"
 
 // globals
-const double CUT_M4LLOW         = 70.;
-const double CUT_M4LHIGH        = 999999.;
+const double CUT_M4LLOW         = 118.;
+const double CUT_M4LHIGH        = 130.;
 const double m4lDivide          = 150.;
 double isoCutEl                 = 999999.;
 //double isoCutEl               = 0.35;
@@ -15,7 +15,7 @@ int printOutWidth               = 12;
 double var_plotHigh             = 600.0;
 double var_plotLow              = 50.0;
 double var_nBins                = 110;
-double binWidth = ((int) (100*(var_plotHigh - var_plotLow)/var_nBins))/100.;
+double binWidth                 = ((int) (100*(var_plotHigh - var_plotLow)/var_nBins))/100.;
 
 TString fr_hist_mu_EB           = "h1D_FRmu_EB";
 TString fr_hist_mu_EE           = "h1D_FRmu_EE";
@@ -23,14 +23,18 @@ TString fr_hist_el_EB           = "h1D_FRel_EB";
 TString fr_hist_el_EE           = "h1D_FRel_EE";
 TString treeName                = "passedEvents";
 
-TString fileNameTag = "estimatesZX";
-TString fOption = "RECREATE";
+TString fileNameTag             = "estimatesZX";
+TString fOption                 = "RECREATE";
+TString lineSplit               = "================================================";
 
-TString slimmedZXFileName       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181107/SkimTree_DarkPhoton_ZX_Run2017Data_m4l70/Data_Run2017_noDuplicates.root";
+//TString slimmedZXFileName       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181107/SkimTree_DarkPhoton_ZX_Run2017Data_m4l70/Data_Run2017_noDuplicates.root";
+TString slimmedZXFileName       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181116/SkimTree_DarkPhoton_ZX_Run2017Data_m4l70/Data_Run2017-17Nov2017_noDuplicates.root";
 
 // get the FR histograms and slimmed ZX tree
-TString elFilePath = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root";
-TString muFilePath = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root";
+//TString elFilePath = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root";
+//TString muFilePath = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root";
+TString elFilePath      = "/home/lucien/Higgs/DarkZ/ZXEstimate/Data/fakeRate2017_20190115.root";
+TString muFilePath      = "/home/lucien/Higgs/DarkZ/ZXEstimate/Data/fakeRate2017_20190115.root";
 
 double getFR(int lep_id, double lep_pt, double lep_eta, TH1D* h1D_FRel_EB,   TH1D* h1D_FRel_EE,   TH1D* h1D_FRmu_EB,   TH1D* h1D_FRmu_EE);
 
@@ -44,6 +48,12 @@ int getEstimatesFromCR(TTree* tree,
                   );
 
 void estimateZX(){
+    cout << lineSplit << endl;
+    cout << "Using input: " << endl;
+    cout << slimmedZXFileName << endl;
+    cout << elFilePath << endl;
+    cout << muFilePath << endl;
+    cout << lineSplit << endl;
     getEstimateZX(slimmedZXFileName);
 }
 
@@ -123,9 +133,9 @@ int getEstimatesFromCR(TTree* tree,
               TH1D* &h1D_m4l_SR_2P2F, TH1D* &h1D_m4l_SR_3P1F,
               TH1D* &h1D_m4l_SR_2P2F_4mu, TH1D* &h1D_m4l_SR_3P1F_4mu,
               TH1D* &h1D_m4l_SR_2P2F_4e, TH1D* &h1D_m4l_SR_3P1F_4e,
-              TH1D* &h1D_m4l_SR_2P2F_2e2mu, TH1D* &h1D_m4l_SR_3P1F_2e2mu,
-              double ptElCut, double ptMuCut, double mZ2Cut){
-    
+              TH1D* &h1D_m4l_SR_2P2F_2e2mu, TH1D* &h1D_m4l_SR_3P1F_2e2mu)
+              {
+
     // counters
     int nEvtPassedZXCRSelection = 0;
     int nEvt2P2FLeptons = 0;
@@ -133,7 +143,8 @@ int getEstimatesFromCR(TTree* tree,
     int nFailedLeptonsZ2 = 0;
 
     // get branches
-    setZXTree(tree);
+    //setZXTree(tree);
+    setHZZLiteTree(tree);
 
     Long64_t nentries = tree->GetEntries();
     cout << "nentries: " << nentries << endl;
@@ -171,11 +182,11 @@ int getEstimatesFromCR(TTree* tree,
                 //lep_iso[k]= lep_RelIsoNoFSR->at(lep_Hindex[k]);
                 //idL[k] = lep_id->at(lep_Hindex[k]);
 
-                lep_tight[k] = lep_tightId->at(lep_Hindex->at(k));
-                lep_iso[k]= lep_RelIsoNoFSR->at(lep_Hindex->at(k));
-                idL[k] = lep_id->at(lep_Hindex->at(k));
+                lep_tight[k] = lep_tightId->at(lep_Hindex_stdvec->at(k));
+                lep_iso[k]= lep_RelIsoNoFSR->at(lep_Hindex_stdvec->at(k));
+                idL[k] = lep_id->at(lep_Hindex_stdvec->at(k));
                 TLorentzVector lep;
-                lep.SetPtEtaPhiM(lep_pt->at(lep_Hindex->at(k)),lep_eta->at(lep_Hindex->at(k)),lep_phi->at(lep_Hindex->at(k)),lep_mass->at(lep_Hindex->at(k)));
+                lep.SetPtEtaPhiM(lep_pt->at(lep_Hindex_stdvec->at(k)),lep_eta->at(lep_Hindex_stdvec->at(k)),lep_phi->at(lep_Hindex_stdvec->at(k)),lep_mass->at(lep_Hindex_stdvec->at(k)));
                 //lep.SetPtEtaPhiM(lep_pt->at(lep_Hindex[k]),lep_eta->at(lep_Hindex[k]),lep_phi->at(lep_Hindex[k]),lep_mass->at(lep_Hindex[k]));
                 pTL[k]  = lep.Pt();
                 etaL[k] = lep.Eta();
