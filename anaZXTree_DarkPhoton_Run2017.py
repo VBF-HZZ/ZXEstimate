@@ -5,12 +5,27 @@ from PyUtils.Shell import makedirs
 # ____________________________________________________________________________ ||
 inputPath       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181116/SkimTree_DarkPhoton_ZX_Run2017Data_m4l70/Data_Run2017-17Nov2017_noDuplicates.root"
 treeName        = "passedEvents"
-elFilePath      = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root"
-muFilePath      = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root"
 isoElCut        = 999999.
 isoMuCut        = 0.35
 outputDir       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181116/SkimTree_DarkPhoton_ZX_Run2017Data_m4l70/"
-TFileName       = "Data_Run2017-17Nov2017_noDuplicates_FRWeight.root"
+
+# ============================================================================ ||
+# FRWeight
+#elFilePath      = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root"
+#muFilePath      = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root"
+#TFileName       = "Data_Run2017-17Nov2017_noDuplicates_FRWeight.root"
+
+# ============================================================================ ||
+# FRWeight
+#elFilePath      = "/home/lucien/Higgs/DarkZ/ZXEstimate/Data/fakeRate2017_20190115.root"
+#muFilePath      = "/home/lucien/Higgs/DarkZ/ZXEstimate/Data/fakeRate2017_20190115.root"
+#TFileName       = "Data_Run2017-17Nov2017_noDuplicates_FRWeightv2.root"
+
+# ============================================================================ ||
+# FRWeight from Vukasin
+elFilePath      = "/home/lucien/Higgs/DarkZ/ZXEstimate/Data/FakeRate_Vukasin_190301/fakeRates_2017.root"
+muFilePath      = "/home/lucien/Higgs/DarkZ/ZXEstimate/Data/FakeRate_Vukasin_190301/fakeRates_2017.root"
+TFileName       = "Data_Run2017-17Nov2017_noDuplicates_FRWeightFromVukasin.root"
 
 # ____________________________________________________________________________ ||
 ROOT.gSystem.Load("include/ZXAnalyzer_h.so")
