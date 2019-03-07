@@ -37,6 +37,10 @@ ana = ROOT.ZXAnalyzer(
                 outputDir,
                 TFileName,
                 "LiteHZZTree",
+                "Data_FRmu_EB",
+                "Data_FRmu_EE",
+                "Data_FRel_EB",
+                "Data_FRel_EE",
                 )
 #ana.getFile(inputPath)
 #ana.getTree(treeName)
