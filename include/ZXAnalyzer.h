@@ -99,8 +99,8 @@ void ZXAnalyzer::setup(){
 
     outTree->Branch("FRWeightProd",&FRWeightProd,"FRWeightProd/F");
     outTree->Branch("FRWeightSum",&FRWeightSum,"FRWeightSum/F");
-    outTree->Branch("FRWeightL3",&FRWeightL3,"FRWeightSumCorrL3/F");
-    outTree->Branch("FRWeightL4",&FRWeightL4,"FRWeightSumCorrL4/F");
+    outTree->Branch("FRWeightL3",&FRWeightL3,"FRWeightL3/F");
+    outTree->Branch("FRWeightL4",&FRWeightL4,"FRWeightL4/F");
     outTree->Branch("FRWeightProd_UniIso",&FRWeightProd_UniIso,"FRWeightProd_UniIso/F");
     outTree->Branch("FRWeightProd_AsymIso",&FRWeightProd_AsymIso,"FRWeightProd_AsymIso/F");
     outTree->Branch("nFailedLeptonsZ2",&nFailedLeptonsZ2,"nFailedLeptonsZ2/I");
@@ -123,63 +123,65 @@ void ZXAnalyzer::process(){
     float pTL[4];
     float etaL[4];
     float phiL[4];
-    for(unsigned int k = 0; k <= 3; k++) {
-        
-        TLorentzVector lep;
-        if (inputTreeType == tree_type_ZXTree) {
-            lep_tight[k] = lep_tightId->at(lep_Hindex[k]);
-            lep_iso[k]= lep_RelIsoNoFSR->at(lep_Hindex[k]);
-            idL[k] = lep_id->at(lep_Hindex[k]);
-            lep.SetPtEtaPhiM(lep_pt->at(lep_Hindex[k]),lep_eta->at(lep_Hindex[k]),lep_phi->at(lep_Hindex[k]),lep_mass->at(lep_Hindex[k]));
-        } else if (inputTreeType == tree_type_LiteHZZTree) {
-            lep_tight[k] = lep_tightId->at(lep_Hindex_stdvec->at(k));
-            lep_iso[k]= lep_RelIsoNoFSR->at(lep_Hindex_stdvec->at(k));
-            idL[k] = lep_id->at(lep_Hindex_stdvec->at(k));
-            lep.SetPtEtaPhiM(lep_pt->at(lep_Hindex_stdvec->at(k)),lep_eta->at(lep_Hindex_stdvec->at(k)),lep_phi->at(lep_Hindex_stdvec->at(k)),lep_mass->at(lep_Hindex_stdvec->at(k)));
+    if (lep_pt->size() >= 4){
+        for(unsigned int k = 0; k <= 3; k++) {
+            
+            TLorentzVector lep;
+            if (inputTreeType == tree_type_ZXTree) {
+                lep_tight[k] = lep_tightId->at(lep_Hindex[k]);
+                lep_iso[k]= lep_RelIsoNoFSR->at(lep_Hindex[k]);
+                idL[k] = lep_id->at(lep_Hindex[k]);
+                lep.SetPtEtaPhiM(lep_pt->at(lep_Hindex[k]),lep_eta->at(lep_Hindex[k]),lep_phi->at(lep_Hindex[k]),lep_mass->at(lep_Hindex[k]));
+            } else if (inputTreeType == tree_type_LiteHZZTree) {
+                lep_tight[k] = lep_tightId->at(lep_Hindex_stdvec->at(k));
+                lep_iso[k]= lep_RelIsoNoFSR->at(lep_Hindex_stdvec->at(k));
+                idL[k] = lep_id->at(lep_Hindex_stdvec->at(k));
+                lep.SetPtEtaPhiM(lep_pt->at(lep_Hindex_stdvec->at(k)),lep_eta->at(lep_Hindex_stdvec->at(k)),lep_phi->at(lep_Hindex_stdvec->at(k)),lep_mass->at(lep_Hindex_stdvec->at(k)));
+            };
+            pTL[k]  = lep.Pt();
+            etaL[k] = lep.Eta();
+            phiL[k] = lep.Phi();
         };
-        pTL[k]  = lep.Pt();
-        etaL[k] = lep.Eta();
-        phiL[k] = lep.Phi();
-    };
 
-    nFailedLeptonsZ2 = !(lep_tight[2] && ((abs(idL[2])==11 && lep_iso[2]<isoCutEl) || (abs(idL[2])==13 && lep_iso[2]<isoCutMu))) + !(lep_tight[3] && ((abs(idL[3])==11 && lep_iso[3]<isoCutEl) || (abs(idL[3])==13 && lep_iso[3]<isoCutMu)));
+        nFailedLeptonsZ2 = !(lep_tight[2] && ((abs(idL[2])==11 && lep_iso[2]<isoCutEl) || (abs(idL[2])==13 && lep_iso[2]<isoCutMu))) + !(lep_tight[3] && ((abs(idL[3])==11 && lep_iso[3]<isoCutEl) || (abs(idL[3])==13 && lep_iso[3]<isoCutMu)));
  
-    if (nFailedLeptonsZ2 == 1) {
-        float fr3 = getFR(idL[2], pTL[2], etaL[2], h1D_FRel_EB, h1D_FRel_EE, h1D_FRmu_EB, h1D_FRmu_EE);
-        float fr4 = getFR(idL[3], pTL[3], etaL[3], h1D_FRel_EB, h1D_FRel_EE, h1D_FRmu_EB, h1D_FRmu_EE);
-        float fr = (!(lep_tight[2] && ((abs(idL[2])==11 && lep_iso[2]<isoCutEl) || (abs(idL[2])==13 && lep_iso[2]<isoCutMu))))*(fr3/(1-fr3)) +
-                    (!(lep_tight[3] && ((abs(idL[3])==11 && lep_iso[3]<isoCutEl) || (abs(idL[3])==13 && lep_iso[3]<isoCutMu))))*(fr4/(1-fr4));
-    
-        FRWeightProd=fr;
-        FRWeightSum=fr;
-        FRWeightL3=fr3;
-        FRWeightL4=fr4;
-        if (lep_iso[2] > lep_iso[3]) {
-            FRWeightProd_AsymIso=fr3;
-        } else {
+        if (nFailedLeptonsZ2 == 1) {
+            float fr3 = getFR(idL[2], pTL[2], etaL[2], h1D_FRel_EB, h1D_FRel_EE, h1D_FRmu_EB, h1D_FRmu_EE);
+            float fr4 = getFR(idL[3], pTL[3], etaL[3], h1D_FRel_EB, h1D_FRel_EE, h1D_FRmu_EB, h1D_FRmu_EE);
+            float fr = (!(lep_tight[2] && ((abs(idL[2])==11 && lep_iso[2]<isoCutEl) || (abs(idL[2])==13 && lep_iso[2]<isoCutMu))))*(fr3/(1-fr3)) +
+                        (!(lep_tight[3] && ((abs(idL[3])==11 && lep_iso[3]<isoCutEl) || (abs(idL[3])==13 && lep_iso[3]<isoCutMu))))*(fr4/(1-fr4));
+        
+            FRWeightProd=fr;
+            FRWeightSum=fr;
+            FRWeightL3=fr3;
+            FRWeightL4=fr4;
+            if (lep_iso[2] > lep_iso[3]) {
+                FRWeightProd_AsymIso=fr3;
+            } else {
 
-            FRWeightProd_AsymIso=fr4;
-        }
-        FRWeightProd_UniIso=fr;
-    } else if (nFailedLeptonsZ2 == 2) {
-        float fr3 = getFR(idL[2], pTL[2], etaL[2], h1D_FRel_EB, h1D_FRel_EE, h1D_FRmu_EB, h1D_FRmu_EE);
-        float fr4 = getFR(idL[3], pTL[3], etaL[3], h1D_FRel_EB, h1D_FRel_EE, h1D_FRmu_EB, h1D_FRmu_EE);
-        float fr = (fr3/(1-fr3)) * (fr4/(1-fr4));
-        FRWeightProd=fr;
-        FRWeightSum=fr3/(1-fr3)+fr4/(1-fr4);
-        FRWeightL3=fr3/(1-fr3);
-        FRWeightL4=fr4/(1-fr4);
-        if (lep_iso[2] > lep_iso[3]) {
-            FRWeightProd_AsymIso=fr3;
-        } else {
+                FRWeightProd_AsymIso=fr4;
+            }
+            FRWeightProd_UniIso=fr;
+        } else if (nFailedLeptonsZ2 == 2) {
+            float fr3 = getFR(idL[2], pTL[2], etaL[2], h1D_FRel_EB, h1D_FRel_EE, h1D_FRmu_EB, h1D_FRmu_EE);
+            float fr4 = getFR(idL[3], pTL[3], etaL[3], h1D_FRel_EB, h1D_FRel_EE, h1D_FRmu_EB, h1D_FRmu_EE);
+            float fr = (fr3/(1-fr3)) * (fr4/(1-fr4));
+            FRWeightProd=fr;
+            FRWeightSum=fr3/(1-fr3)+fr4/(1-fr4);
+            FRWeightL3=fr3/(1-fr3);
+            FRWeightL4=fr4/(1-fr4);
+            if (lep_iso[2] > lep_iso[3]) {
+                FRWeightProd_AsymIso=fr3;
+            } else {
 
-            FRWeightProd_AsymIso=fr4;
-        }
-        float dr2 = deltaR2(etaL[2],phiL[2],etaL[3],phiL[3]);
-        FRWeightProd_UniIso = ( fr3*fr4*dr2/4./drIso/drIso + sqrt(fr3*fr4)*(1.-sqrt(dr2)/2./drIso) ) / ( (1.-fr3)*(1.-fr4)*dr2/4./drIso/drIso + sqrt((1.-fr3)*(1.-fr4))*(1.-sqrt(dr2)/2./drIso) );  
+                FRWeightProd_AsymIso=fr4;
+            }
+            float dr2 = deltaR2(etaL[2],phiL[2],etaL[3],phiL[3]);
+            FRWeightProd_UniIso = ( fr3*fr4*dr2/4./drIso/drIso + sqrt(fr3*fr4)*(1.-sqrt(dr2)/2./drIso) ) / ( (1.-fr3)*(1.-fr4)*dr2/4./drIso/drIso + sqrt((1.-fr3)*(1.-fr4))*(1.-sqrt(dr2)/2./drIso) );  
 
+        };
+        outTree->Fill();
     };
-    outTree->Fill();
 }
 
 
