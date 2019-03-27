@@ -13,7 +13,7 @@ outputDir       = "/raid/raid7/lucien/Higgs/DarkZ-NTuple/20181116/SkimTree_DarkP
 # FRWeight
 #elFilePath      = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root"
 #muFilePath      = "/home/lucien/Higgs/DarkZ/CMSSW_9_4_2/src/liteUFHZZ4LAnalyzer/Data/fakeRate2017.root"
-TFileName       = "Data_Run2017-17Nov2017_noDuplicates_FRWeight.root"
+#TFileName       = "Data_Run2017-17Nov2017_noDuplicates_FRWeight.root"
 
 # ============================================================================ ||
 # FRWeight
@@ -25,9 +25,9 @@ TFileName       = "Data_Run2017-17Nov2017_noDuplicates_FRWeight.root"
 # FRWeight from Vukasin
 #elFilePath      = "/home/lucien/Higgs/DarkZ/ZXEstimate/Data/FakeRate_Vukasin_190301/fakeRates_2017.root"
 #muFilePath      = "/home/lucien/Higgs/DarkZ/ZXEstimate/Data/FakeRate_Vukasin_190301/fakeRates_2017.root"
-elFilePath      = "Data/FakeRate_Vukasin_190212/Hist_Data_ptl3_Data.root"
-muFilePath      = "Data/FakeRate_Vukasin_190212/Hist_Data_ptl3_Data.root"
-TFileName       = "Data_Run2017-17Nov2017_noDuplicates_FRWeightFromVukasinV2.root"
+elFilePath      = "Data/FakeRate_Vukasin_190326/FR_WZremoved_17.root"
+muFilePath      = "Data/FakeRate_Vukasin_190326/FR_WZremoved_17.root"
+TFileName       = "Data_Run2017-17Nov2017_noDuplicates_FRWeightFromVukasinWZRemoved.root"
 
 # ____________________________________________________________________________ ||
 ROOT.gSystem.Load("include/ZXAnalyzer_h.so")
